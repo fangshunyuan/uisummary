@@ -32,8 +32,8 @@ def parse(ping_output):
 	matcher = re.compile(r'PING ([a-zA-Z0-9.\-]+) \(')
 	host = _get_match_groups(ping_output, matcher)[0]
 
-	matcher = re.compile(r'(\d+) packets transmitted, (\d+) received')
-	sent, received = _get_match_groups(ping_output, matcher)	
+	matcher = re.compile(r'(\d+) packets transmitted, (\d+) packets received')
+	sent, received = _get_match_groups(ping_output, matcher)
 
 	try:
 		matcher = re.compile(r'(\d+.\d+)/(\d+.\d+)/(\d+.\d+)/(\d+.\d+)')

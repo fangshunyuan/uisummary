@@ -4,13 +4,29 @@ from PyQt4 import QtCore, QtGui, uic
 # load the UI
 form_class = uic.loadUiType("UIsummary.ui")[0]
 
-host = "192.168.1.1"
+host = "www.google.com.sg"
 class UISummaryWindowClass(QtGui.QMainWindow, form_class):
 	def __init__(self, parent=None):
 		QtGui.QMainWindow.__init__(self, parent)
+
+		# setup stylesheet
+		f = open('darkorange.stylesheet', 'r')
+		self.styleData = f.read()
+		f.close()
+
+		# initialise actual GUI
 		self.setupUi(self)
+		self.setStyleSheet(self.styleData)
+
 		self.connectionStatus.setText("Initialising...")
 		self.pingStatus.setText("Initialising...")
+
+		self.connectionStatusButton.setStyleSheet("background-color: red")
+
+		# initialise table widget
+		self.orderTableWidget.setColumnCount(4)
+		self.orderTableWidget.setRowCount(4)
+		self.orderTableWidget.setHorizontalHeaderLabels(['Table', 'Item', 'Qty', 'Remarks'])
 
 		self.connect(ping_thread, ping_thread.signal, self.updateUI)
 
@@ -18,9 +34,11 @@ class UISummaryWindowClass(QtGui.QMainWindow, form_class):
 		if value == "nan":
 			self.connectionStatus.setText("Disconnected")
 			self.pingStatus.setText("Disconnected")
+			self.connectionStatusButton.setStyleSheet("background-color: red")
 		else:
 			self.connectionStatus.setText("Connected to Network")
 			self.pingStatus.setText("Ping Time: " + str(value) + " ms")
+			self.connectionStatusButton.setStyleSheet("background-color: green")
 
 class PingThread(QtCore.QThread):
 	def __init__(self):
@@ -42,6 +60,7 @@ def signal_handler(signal, frame):
 if __name__ == "__main__":
 	signal.signal(signal.SIGINT, signal_handler)
 	app = QtGui.QApplication(sys.argv)
+	app.setStyle(QtGui.QStyleFactory.create("macintosh"))
 
 	ping_thread = PingThread()
 
