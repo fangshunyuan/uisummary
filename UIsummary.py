@@ -18,15 +18,22 @@ class UISummaryWindowClass(QtGui.QMainWindow, form_class):
 		self.setupUi(self)
 		self.setStyleSheet(self.styleData)
 
+		# initialise menubar actions
+		self.closeAction.setShortcut('Ctrl+Q')
+		self.closeAction.setStatusTip('Close application')
+		self.closeAction.triggered.connect(QtGui.qApp.quit)
+
+		# initialise statuses
 		self.connectionStatus.setText("Initialising...")
 		self.pingStatus.setText("Initialising...")
 
 		self.connectionStatusButton.setStyleSheet("background-color: red")
+		self.allNodesOnlineStatusButton.setStyleSheet("background-color: red")
 
 		# initialise table widget
-		self.orderTableWidget.setColumnCount(4)
-		self.orderTableWidget.setRowCount(4)
-		self.orderTableWidget.setHorizontalHeaderLabels(['Table', 'Item', 'Qty', 'Remarks'])
+		self.orderTableWidget.setColumnCount(5)
+		self.orderTableWidget.setRowCount(20)
+		self.orderTableWidget.setHorizontalHeaderLabels(['Table', 'Item(s)', 'Qty', 'Amount($)', 'Remarks'])
 
 		self.connect(ping_thread, ping_thread.signal, self.updateUI)
 
